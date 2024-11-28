@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface FileRepository extends MongoRepository<FileModel, String> {
-
     List<FileModel> findByFileType(String fileType);
     FileModel findByFileName(String name);
 }

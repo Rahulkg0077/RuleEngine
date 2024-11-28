@@ -18,3 +18,13 @@ when
 then
     paymentService.processTXTFile(fileModule);
 end
+
+
+
+rule "CSV"
+
+when
+    fileModel : FileModel(fileType == "csv");
+then
+    paymentService.processCSVFile(fileModel);
+end

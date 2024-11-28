@@ -1,6 +1,5 @@
 package com.hsbc.ruleengine.repository;
 
-import com.hsbc.ruleengine.entity.FileModel;
 import com.hsbc.ruleengine.entity.Payment;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
