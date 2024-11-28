@@ -1,16 +1,17 @@
 package com.hsbc.ruleengine.config;
 
-import com.hsbc.ruleengine.service.PaymentService;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.hsbc.ruleengine.service.PaymentService;
+
 @Configuration
 public class DroolsConfig {
 
-    private static final String DRL_FILE = "rules/FileRules.drl";
+    private static final String DRL_FILE = "rules/PaymentValidationRules.drl";
 
     @Bean
     public KieContainer kieContainer() {

@@ -1,14 +1,20 @@
 package com.hsbc.ruleengine.controller;
 
-import com.hsbc.ruleengine.entity.FileModel;
-import com.hsbc.ruleengine.service.FileService;
-import com.hsbc.ruleengine.service.PaymentService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import com.hsbc.ruleengine.entity.FileModel;
+import com.hsbc.ruleengine.entity.Payment;
+import com.hsbc.ruleengine.service.FileService;
 
 @RestController
 @RequestMapping("/file")
@@ -17,34 +23,30 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @Autowired
-    private PaymentService paymentService;
-
-
     @GetMapping("/fire")
-    public String fireRules(){
-        fileService.processFiles();
-        return "Success";
+    public List<Payment> fireRules() {
+        return fileService.processFiles();
+
     }
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file){
+    public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             FileModel fileModel = fileService.storeFile(file);
             return ResponseEntity.ok().body("File Uploaded Successfully: " + fileModel.getFileName());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Could not upload the file: " + e.getMessage());
         }
     }
 
     @GetMapping("/type/{type}")
-    public ResponseEntity<?> findFilesByType(@PathVariable String type){
+    public ResponseEntity<?> findFilesByType(@PathVariable String type) {
         List<FileModel> files = fileService.getFilesByType(type);
         return ResponseEntity.ok(files);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllFiles(){
+    public ResponseEntity<?> getAllFiles() {
         List<FileModel> files = fileService.getAllFiles();
         return ResponseEntity.ok(files);
     }

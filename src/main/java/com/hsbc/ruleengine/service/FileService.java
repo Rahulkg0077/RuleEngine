@@ -1,14 +1,16 @@
 package com.hsbc.ruleengine.service;
 
-import com.hsbc.ruleengine.entity.FileModel;
-import com.hsbc.ruleengine.repository.FileRepository;
-import org.kie.api.runtime.KieSession;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.List;
+import com.hsbc.ruleengine.entity.FileModel;
+import com.hsbc.ruleengine.entity.Payment;
+import com.hsbc.ruleengine.repository.FileRepository;
 
 @Service
 public class FileService {
@@ -17,7 +19,7 @@ public class FileService {
     private FileRepository fileRepository;
 
     @Autowired
-    private KieSession kieSession;
+    PaymentService paymentService;
 
     public FileModel storeFile(MultipartFile file) throws IOException {
         FileModel model = new FileModel();
@@ -29,30 +31,34 @@ public class FileService {
         return fileRepository.save(model);
     }
 
-    private String returnFileType(String fileType){
+    private String returnFileType(String fileType) {
         int lastIndex = fileType.lastIndexOf(".");
         return fileType.substring(lastIndex + 1);
     }
 
-    public List<FileModel> getAllFiles(){
+    public List<FileModel> getAllFiles() {
         return fileRepository.findAll();
     }
 
-    public List<FileModel> getFilesByType(String fileType){
+    public List<FileModel> getFilesByType(String fileType) {
         return fileRepository.findByFileType(fileType);
     }
 
-    public void processFiles(){
+    public List<Payment> processFiles() {
         List<FileModel> files = fileRepository.findAll();
-
-        try {
-            for(FileModel f : files){
-                kieSession.insert(f);
-                kieSession.fireAllRules();
+        List<Payment> payments = new ArrayList<Payment>();
+        for (FileModel f : files) {
+            if (f.getFileType().equals("txt")) {
+                Payment payment = paymentService.processTXTFile(f);
+                payments.add(payment);
+            } else if (f.getFileType() == "pdf") {
+                Payment payment = paymentService.processPDFFile(f);
+                payments.add(payment);
             }
-        } finally {
-            kieSession.dispose();
+
         }
+        return payments;
+
     }
 
 }

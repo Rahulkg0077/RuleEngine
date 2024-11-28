@@ -1,0 +1,123 @@
+
+import com.hsbc.ruleengine.entity.Payment
+
+global com.hsbc.ruleengine.service.PaymentService paymentService
+
+rule "Validate Payment ID"
+salience 5
+when
+    $payment: Payment(paymentId == null || paymentId.trim() == "")
+then
+    System.out.println("Payment ID is missing.");
+    paymentService.addValidationError($payment, "Payment ID is missing.");
+end
+
+rule "Payment ID is Valid"
+salience 5
+when
+    $payment: Payment(paymentId != null && paymentId.trim() != "")
+then
+    System.out.println("Payment ID is valid.");
+end
+
+rule "Validate Sender Name"
+salience 5
+when
+    $payment: Payment(senderName == null || senderName.trim() == "")
+then
+    System.out.println("Sender Name is missing.");
+    paymentService.addValidationError($payment, "Sender Name is missing.");
+end
+
+rule "Sender Name is Valid"
+salience 5
+when
+    $payment: Payment(senderName != null && senderName.trim() != "")
+then
+    System.out.println("Sender Name is valid.");
+end
+
+rule "Validate Receiver Name"
+salience 5
+when
+    $payment: Payment(receiverName == null || receiverName.trim() == "")
+then
+    System.out.println("Receiver Name is missing.");
+    paymentService.addValidationError($payment, "Receiver Name is missing.");
+end
+
+rule "Receiver Name is Valid"
+salience 5
+when
+    $payment: Payment(receiverName != null && receiverName.trim() != "")
+then
+    System.out.println("Receiver Name is valid.");
+end
+
+rule "Validate Currency"
+salience 5
+when
+    $payment: Payment(currency == null || currency.trim() == "")
+then
+    System.out.println("Currency is missing.");
+    paymentService.addValidationError($payment, "Currency is missing.");
+end
+
+rule "Currency is Valid"
+salience 5
+when
+    $payment: Payment(currency != null && currency.trim() != "")
+then
+    System.out.println("Currency is valid.");
+end
+
+rule "Validate Amount"
+salience 5
+when
+    $payment: Payment(amount == null || amount <= 0)
+then
+    System.out.println("Amount should be greater than zero.");
+    paymentService.addValidationError($payment, "Amount should be greater than zero.");
+end
+
+rule "Amount is Valid"
+salience 5
+when
+    $payment: Payment(amount != null && amount > 0)
+then
+    System.out.println("Amount is valid.");
+end
+
+rule "Validate Credit Type"
+salience 5
+when
+    $payment: Payment(creditType == null || creditType.trim() == "")
+then
+    System.out.println("Credit Type is missing.");
+    paymentService.addValidationError($payment, "Credit Type is missing.");
+end
+
+rule "Credit Type is Valid"
+salience 5
+when
+    $payment: Payment(creditType != null && creditType.trim() != "")
+then
+    System.out.println("Credit Type is valid.");
+end
+
+rule "Additional Info Check"
+salience 5
+when
+    $payment: Payment(additionalInfo != null && additionalInfo.length() > 100)
+then
+    System.out.println("Additional Info is too long.");
+    paymentService.addValidationError($payment, "Additional Info is too long.");
+end
+
+rule "Additional Info is Valid"
+salience 5
+when
+    $payment: Payment(additionalInfo == null || additionalInfo.length() <= 100)
+then
+    System.out.println("Additional Info is valid.");
+end
