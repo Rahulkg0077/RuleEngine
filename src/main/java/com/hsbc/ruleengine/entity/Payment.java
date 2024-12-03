@@ -23,13 +23,9 @@ public class Payment {
     private Long amount;
     private boolean status;
     private String additionalInfo;
-    private final List<String> validationErrors = new ArrayList<>();
+    public List<String> validationErrors;
 
-    public List<String> getValidationErrors() {
-        return validationErrors;
-    }
-
-    public void addValidationError(String error) {
-        this.validationErrors.add(error);
+    public Payment() {
+        this.validationErrors = new ArrayList<>();
     }
 }

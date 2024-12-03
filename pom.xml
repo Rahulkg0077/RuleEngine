@@ -85,6 +85,12 @@
 			<artifactId>pdfbox</artifactId>
 			<version>3.0.3</version>
 		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-decisiontables</artifactId>
+			<version>7.74.1.Final</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
